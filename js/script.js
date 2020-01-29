@@ -164,7 +164,7 @@ var registerForm = new Vue({
                             if (response.status == 200) {
                                 //if hosted through github
                                 if (window.location.href.indexOf("danyalam.github.io") > -1) {
-                                    window.location.replace("CW2/page/login.html");
+                                    window.location.replace("/CW2/page/login.html");
                                 } else {
                                     window.location.replace("/page/login.html");
                                 }
@@ -276,7 +276,7 @@ var loginForm = new Vue({
                             localStorage.setItem('currentUser', JSON.stringify(this.loginEmail.toLowerCase()));
 
                             if (window.location.href.indexOf("danyalam.github.io") > -1) {
-                                window.location.replace("CW2/page/myAccount.html");
+                                window.location.replace("/CW2/page/myAccount.html");
                             } else {
                                 window.location.replace("/page/myAccount.html");
                             }                 

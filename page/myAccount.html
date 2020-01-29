@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BrainHive</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+
+<body>
+
+    <header>
+        <div id="menu" v-on:click="menuClicked" tabindex="1" ref="menuButton">
+            <i class="fa fa-bars menu-icon" ref="menuBars"></i>
+        </div>
+
+        <div class="searchCenter">
+            <form class="searchContainer" v-on:submit="userSearched" action="../page/product.html">
+                <i class="fa fa-search searchIcon"></i>
+                <input class="searchBox" type="text" name="search" placeholder="Search...">
+                <input type="submit" value="Search" class="searchButton">
+            </form>
+
+        </div>
+
+        <a id="login" v-bind:href=buttonLinkLogin v-if="!loggedIn"><button>Login</button></a>
+        <a id="login" v-else><button v-on:click="logout">Logout</button></a>
+
+        <a id="register" v-bind:href=buttonLinkRegister v-if="!loggedIn"><button>Register</button></a>
+        <a id="register" v-bind:href=buttonLinkAccount v-else><button>My Account</button></a>
+
+        <div id="logo">
+            <svg width="150" height="27" viewBox="0 0 150 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0.970703 26V0.40625H9.33789C12.1152 0.40625 14.2012 0.980469 15.5957 2.12891C17.002 3.27734 17.7051 4.97656 17.7051 7.22656C17.7051 8.42188 17.3652 9.48242 16.6855 10.4082C16.0059 11.3223 15.0801 12.0312 13.9082 12.5352C15.291 12.9219 16.3809 13.6602 17.1777 14.75C17.9863 15.8281 18.3906 17.1172 18.3906 18.6172C18.3906 20.9141 17.6465 22.7188 16.1582 24.0312C14.6699 25.3438 12.5664 26 9.84766 26H0.970703ZM4.3457 14.0293V23.2402H9.91797C11.4883 23.2402 12.7246 22.8359 13.627 22.0273C14.541 21.207 14.998 20.082 14.998 18.6523C14.998 15.5703 13.3223 14.0293 9.9707 14.0293H4.3457ZM4.3457 11.3223H9.44336C10.9199 11.3223 12.0977 10.9531 12.9766 10.2148C13.8672 9.47656 14.3125 8.47461 14.3125 7.20898C14.3125 5.80273 13.9023 4.7832 13.082 4.15039C12.2617 3.50586 11.0137 3.18359 9.33789 3.18359H4.3457V11.3223ZM32.084 9.89844C31.5918 9.81641 31.0586 9.77539 30.4844 9.77539C28.3516 9.77539 26.9043 10.6836 26.1426 12.5V26H22.8906V6.98047H26.0547L26.1074 9.17773C27.1738 7.47852 28.6855 6.62891 30.6426 6.62891C31.2754 6.62891 31.7559 6.71094 32.084 6.875V9.89844ZM46.1289 26C45.9414 25.625 45.7891 24.957 45.6719 23.9961C44.1602 25.5664 42.3555 26.3516 40.2578 26.3516C38.3828 26.3516 36.8418 25.8242 35.6348 24.7695C34.4395 23.7031 33.8418 22.3555 33.8418 20.7266C33.8418 18.7461 34.5918 17.2109 36.0918 16.1211C37.6035 15.0195 39.7246 14.4688 42.4551 14.4688H45.6191V12.9746C45.6191 11.8379 45.2793 10.9355 44.5996 10.2676C43.9199 9.58789 42.918 9.24805 41.5938 9.24805C40.4336 9.24805 39.4609 9.54102 38.6758 10.127C37.8906 10.7129 37.498 11.4219 37.498 12.2539H34.2285C34.2285 11.3047 34.5625 10.3906 35.2305 9.51172C35.9102 8.62109 36.8242 7.91797 37.9727 7.40234C39.1328 6.88672 40.4043 6.62891 41.7871 6.62891C43.9785 6.62891 45.6953 7.17969 46.9375 8.28125C48.1797 9.37109 48.8242 10.877 48.8711 12.7988V21.5527C48.8711 23.2988 49.0938 24.6875 49.5391 25.7188V26H46.1289ZM40.7324 23.5215C41.752 23.5215 42.7188 23.2578 43.6328 22.7305C44.5469 22.2031 45.209 21.5176 45.6191 20.6738V16.7715H43.0703C39.0859 16.7715 37.0938 17.9375 37.0938 20.2695C37.0938 21.2891 37.4336 22.0859 38.1133 22.6602C38.793 23.2344 39.666 23.5215 40.7324 23.5215ZM57.502 26H54.25V6.98047H57.502V26ZM53.9863 1.93555C53.9863 1.4082 54.1445 0.962891 54.4609 0.599609C54.7891 0.236328 55.2695 0.0546875 55.9023 0.0546875C56.5352 0.0546875 57.0156 0.236328 57.3438 0.599609C57.6719 0.962891 57.8359 1.4082 57.8359 1.93555C57.8359 2.46289 57.6719 2.90234 57.3438 3.25391C57.0156 3.60547 56.5352 3.78125 55.9023 3.78125C55.2695 3.78125 54.7891 3.60547 54.4609 3.25391C54.1445 2.90234 53.9863 2.46289 53.9863 1.93555ZM65.7988 6.98047L65.9043 9.37109C67.3574 7.54297 69.2559 6.62891 71.5996 6.62891C75.6191 6.62891 77.6465 8.89648 77.6816 13.4316V26H74.4297V13.4141C74.418 12.043 74.1016 11.0293 73.4805 10.373C72.8711 9.7168 71.916 9.38867 70.6152 9.38867C69.5605 9.38867 68.6348 9.66992 67.8379 10.2324C67.041 10.7949 66.4199 11.5332 65.9746 12.4473V26H62.7227V6.98047H65.7988Z"
+                    fill="#9766BE" />
+                <path
+                    d="M102.766 26H99.373V14.1699H86.4707V26H83.0957V0.40625H86.4707V11.4102H99.373V0.40625H102.766V26ZM111.783 26H108.531V6.98047H111.783V26ZM108.268 1.93555C108.268 1.4082 108.426 0.962891 108.742 0.599609C109.07 0.236328 109.551 0.0546875 110.184 0.0546875C110.816 0.0546875 111.297 0.236328 111.625 0.599609C111.953 0.962891 112.117 1.4082 112.117 1.93555C112.117 2.46289 111.953 2.90234 111.625 3.25391C111.297 3.60547 110.816 3.78125 110.184 3.78125C109.551 3.78125 109.07 3.60547 108.742 3.25391C108.426 2.90234 108.268 2.46289 108.268 1.93555ZM123.279 21.5879L127.99 6.98047H131.312L124.492 26H122.014L115.123 6.98047H118.445L123.279 21.5879ZM142.088 26.3516C139.51 26.3516 137.412 25.5078 135.795 23.8203C134.178 22.1211 133.369 19.8535 133.369 17.0176V16.4199C133.369 14.5332 133.727 12.8516 134.441 11.375C135.168 9.88672 136.176 8.72656 137.465 7.89453C138.766 7.05078 140.172 6.62891 141.684 6.62891C144.156 6.62891 146.078 7.44336 147.449 9.07227C148.82 10.7012 149.506 13.0332 149.506 16.0684V17.4219H136.621C136.668 19.2969 137.213 20.8145 138.256 21.9746C139.311 23.123 140.646 23.6973 142.264 23.6973C143.412 23.6973 144.385 23.4629 145.182 22.9941C145.979 22.5254 146.676 21.9043 147.273 21.1309L149.26 22.6777C147.666 25.127 145.275 26.3516 142.088 26.3516ZM141.684 9.30078C140.371 9.30078 139.27 9.78125 138.379 10.7422C137.488 11.6914 136.938 13.0273 136.727 14.75H146.254V14.5039C146.16 12.8516 145.715 11.5742 144.918 10.6719C144.121 9.75781 143.043 9.30078 141.684 9.30078Z"
+                    fill="#969696" />
+            </svg>
+        </div>
+
+        </div>
+
+    </header>
+
+    <nav class="scripted-menu" ref="navBar" v-show="show" v-click-outside="clickedOutside">
+        <ul class="menu-list" ref="menu-stuff" tabindex="1">
+            <li>
+                <a href="../index.html">Home</a>
+            </li>
+            <li>
+                <a href="product.html">Products</a>
+            </li>
+        </ul>
+    </nav>
+
+
+    <main class="main-without-aside not-index-main user-page">
+
+        <div class="myAccount-welcome">You are signed in as {{username}}</div>
+
+        <div class="myAccount-features" v-show="currentUserIsProvider">
+            <div class="list-of-lessons">
+                <h1 class="myAccount-headings">Your Taught Lessons</h1>
+
+                <div class="lessons" v-for="(product, index) in providerProducts">
+
+                    <div class="edit-input-holder">
+                        <label class="removal-labels-topic" for="lsn-name">Topic</label>
+                        <input class="lesson-name" type="text" v-model="newValTopic[index]"
+                            v-bind:placeholder="product.Topic" v-bind:disabled="allowDisallow">
+                    </div>
+
+                    <div class="edit-input-holder">
+                        <label class="removal-labels-price" for="lsn-price">Price</label>
+                        <input class="lesson-price" type="text" v-model="newValPrice[index]"
+                            v-bind:placeholder="product.Price" v-bind:disabled="allowDisallow">
+                    </div>
+
+                    <div class="edit-input-holder">
+                        <label class="removal-labels-location" for="lsn-location">Location</label>
+                        <input class="lesson-location" type="text" v-model="newValLocation[index]"
+                            v-bind:placeholder="product.Location" v-bind:disabled="allowDisallow">
+                    </div>
+
+                    <div class="edit-input-holder">
+                        <label class="removal-labels-time" for="lsn-time">Time</label>
+                        <input class="lesson-time" type="number" v-model="newValTime[index]"
+                            v-bind:placeholder="product.Time" v-bind:disabled="allowDisallow">
+                    </div>
+
+                    <div class="edit-input-holder">
+                        <label class="removal-labels-duration" for="lsn-duration">Duration</label>
+                        <input class="lesson-duration" type="number" v-model="newValDuration[index]"
+                            v-bind:placeholder="product.Duration" v-bind:disabled="allowDisallow">
+                    </div>
+
+                    <div class="edit-buttons-holder">
+                        <button class="edit-button" v-on:click="editProduct(index)">Edit</button>
+
+                        <button class="remove-button" v-on:click="removeProduct(index)">Remove</button>
+
+                        <button class="save-button" v-show="showSaveButton[index]"
+                            v-on:click="saveProduct(product._id, index, this)">Save</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="service-form">
+                <h1 class="myAccount-headings">Add More Services</h1>
+
+                <form class="user-service-form" ref="form" id="service-form" action="myAccount.html"
+                    @submit="verifyLesson" v-on:keyup.enter="verifyLesson">
+
+
+                    <div class="input-holder">
+                        <div class="form-items">
+                            <label for="register-topic">Topic</label>
+                            <input type="text" id="register-topic" placeholder="Topic" v-model="subjectInfo.Topic">
+                        </div>
+
+                        <p class="register-subject-form-errors" v-show="topicError">{{topicErrorText}}</p>
+
+
+                        <div class="form-items">
+                            <label for="register-price">Price</label>
+                            <input type="number" id="register-price" v-model="subjectInfo.Price">
+                        </div>
+
+                        <p class="register-subject-form-errors" v-show="priceError">{{priceErrorText}}</p>
+
+
+                        <div class="form-items">
+                            <label for="register-location">Location</label>
+                            <input type="text" id="register-location" placeholder="Location"
+                                v-model="subjectInfo.Location">
+                        </div>
+
+                        <p class="register-subject-form-errors" v-show="locationError">{{locationErrorText}}</p>
+
+                        <div class="form-items">
+                            <label for="register-time">Time</label>
+                            <input type="number" id="register-time" placeholder="Time" v-model="subjectInfo.Time"
+                                min="1">
+                        </div>
+
+                        <p class="register-subject-form-errors" v-show="timeError">{{timeErrorText}}</p>
+
+                        <div class="form-items">
+                            <label for="register-duration">Duration</label>
+                            <input type="number" id="register-duration" placeholder="Duration"
+                                v-model="subjectInfo.Duration" min="1">
+                        </div>
+
+                        <p class="register-subject-form-errors" v-show="durationError">{{durationErrorText}}</p>
+
+                        <div class="sorting-holder">
+                            <select v-model="imageSelected">
+                                <option disabled value="">Image Choices</option>
+                                <option value="../image/mathsIcon.png">Math</option>
+                                <option value="../image/englishIcon.png">English</option>
+                                <option value="../image/pianoIcon.png">Music</option>
+                                <option value="../image/csIcon.png">Computer Science</option>
+                                <option value="../image/random.png">None of the above</option>
+                            </select>
+                        </div>
+
+                        <p class="register-subject-form-errors" v-show="imageError">{{imageErrorText}}</p>
+
+                    </div>
+
+                    <input type="submit" value="Submit" ref="subBtn">
+                </form>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Footer
+    </footer>
+
+    <script src="../js/script.js"></script>
+
+</body>
+
+</html>

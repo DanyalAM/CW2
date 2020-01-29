@@ -162,7 +162,12 @@ var registerForm = new Vue({
                             body: final
                         }).then(function (response) {
                             if (response.status == 200) {
-                                window.location.replace("/page/login.html");
+                                //if hosted through github
+                                if (window.location.href.indexOf("danyalam.github.io") > -1) {
+                                    window.location.replace("CW2/page/login.html");
+                                } else {
+                                    window.location.replace("/page/login.html");
+                                }
                             } else {
                                 alert("Unknown Error - Please Inform Support");
                             }
@@ -270,7 +275,11 @@ var loginForm = new Vue({
                             this.incorrectInfo = false;
                             localStorage.setItem('currentUser', JSON.stringify(this.loginEmail.toLowerCase()));
 
-                            window.location.replace("/page/myAccount.html");
+                            if (window.location.href.indexOf("danyalam.github.io") > -1) {
+                                window.location.replace("CW2/page/myAccount.html");
+                            } else {
+                                window.location.replace("/page/myAccount.html");
+                            }                 
                         }
                     }
 
@@ -338,7 +347,7 @@ var ourProducts = new Vue({
                         //if option 5 is selected
                         //sort by best reviews to worse 
                         this.course.sort(function (a, b) { return b.AvgRating - a.AvgRating });
-                    } 
+                    }
                 })
         },
         likeProduct: function (index, prodID) {

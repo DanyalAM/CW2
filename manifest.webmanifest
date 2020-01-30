@@ -1,0 +1,22 @@
+{
+    "name": "Brain Hive - Course Provider",
+    "short_name": "Brain Hive",
+    "description": "A service dedicated to providing high quality courses to students and parents",
+    "icons": [
+        {
+            "src": "icons/icon32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "orientation": "portrait",
+    "theme_color": "#FFF",
+    "background_color": "#9766BE"
+}

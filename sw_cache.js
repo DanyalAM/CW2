@@ -46,7 +46,7 @@ self.addEventListener('install', (e) => {
             })
             .catch(error => {
                 console.log("[Service Worker:] " + error);
-                cache.addAll(cacheAssets);
+                cache.addAll(cacheAssets2);
             })
             .then(() => self.skipWaiting())
     );

@@ -1,7 +1,8 @@
 // load Express.js 
-const express = require('express')
-const app = express()
-const { parse, stringify } = require('flatted/cjs');
+const express = require('express');
+const app = express();
+const webpush = require('web-push');
+const path = require('path');
 
 // load bodyParser module for json payload parsing 
 const bodyParser = require('body-parser');
@@ -16,6 +17,25 @@ app.use((req, res, next) => {
     next();
 });
 
+
+const publicVapidKey = 'BMUvS7wmXpiSx7-b20F_Y3Kap2iD4i2cCA4OfNZSLrRur0PDvbeICrw0nz_nVGMicaHAPMCJKcsM9KqFaNeCMKU';
+const privateVapidKey = '4H1caeuCEBpqrfhmYZy4Cr74Cw63VdxNblBMutd2KiM';
+
+webpush.setVapidDetails('mailto:test@test.com', publicVapidKey, privateVapidKey);
+
+app.post('/subscribe', (req, res) => {
+    //get push subscription
+    const subscription = req.body;
+
+    //resource created
+    res.status(201).json({});
+
+    //create payload
+    const payload = JSON.stringify({title: 'Push Test'});
+
+    //pass object
+    webpush.sendNotification(subscription, payload.catch(err => console.log(err)));
+})
 
 // connect to MongoDB 
 const MongoClient = require('mongodb').MongoClient;

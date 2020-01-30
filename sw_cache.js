@@ -8,27 +8,51 @@ var cacheName = 'v2';
 // }
 // /CW2/index.html
 
+
 var cacheAssets = [
-    '/CW2/index.html',
-    '/CW2/js/script.js',
-    '/CW2/js/component-templates.js',
-    '/CW2/image/arrow-down.png',
-    '/CW2/image/csIcon.png',
-    '/CW2/image/englishIcon.png',
-    '/CW2/image/female-avatar.png',
-    '/CW2/image/male-avatar.png',
-    '/CW2/image/mathsIcon.png',
-    '/CW2/image/pencils-yellowbg.jpg',
-    '/CW2/image/pianoIcon.png',
-    '/CW2/image/loading.jpg',
-    '/CW2/image/random.png',
-    '/CW2/css/style.css',
-    '/CW2/page/login.html',
-    '/CW2/page/myAccount.html',
-    '/CW2/page/product.html',
-    '/CW2/page/register.html',
-    '/CW2/server.js',
+    '/../index.html',
+    '/../js/script.js',
+    '/../js/component-templates.js',
+    '/../image/arrow-down.png',
+    '/../image/csIcon.png',
+    '/../image/englishIcon.png',
+    '/../image/female-avatar.png',
+    '/../image/male-avatar.png',
+    '/../image/mathsIcon.png',
+    '/../image/pencils-yellowbg.jpg',
+    '/../image/pianoIcon.png',
+    '/../image/loading.jpg',
+    '/../image/random.png',
+    '/../css/style.css',
+    '/../page/login.html',
+    '/../page/myAccount.html',
+    '/../page/product.html',
+    '/../page/register.html',
+    '/../server.js',
 ];
+
+//for github
+// var cacheAssets = [
+//     '/CW2/index.html',
+//     '/CW2/js/script.js',
+//     '/CW2/js/component-templates.js',
+//     '/CW2/image/arrow-down.png',
+//     '/CW2/image/csIcon.png',
+//     '/CW2/image/englishIcon.png',
+//     '/CW2/image/female-avatar.png',
+//     '/CW2/image/male-avatar.png',
+//     '/CW2/image/mathsIcon.png',
+//     '/CW2/image/pencils-yellowbg.jpg',
+//     '/CW2/image/pianoIcon.png',
+//     '/CW2/image/loading.jpg',
+//     '/CW2/image/random.png',
+//     '/CW2/css/style.css',
+//     '/CW2/page/login.html',
+//     '/CW2/page/myAccount.html',
+//     '/CW2/page/product.html',
+//     '/CW2/page/register.html',
+//     '/CW2/server.js',
+// ];
 
 //put our files into the cache
 self.addEventListener('install', (e) => {
@@ -62,6 +86,15 @@ self.addEventListener('activate', (e) => {
     )
 });
 
+
+self.addEventListener('push', e => {
+    const data = e.data.json();
+    console.log('[Service Worker] Push Received');
+    self.registration.showNotification(data.title, {
+        body: 'Notified by Brain Hive',
+        icon: '/icons/icon-32.png'
+    });
+})
 //Call fetch event
 // self.addEventListener('fetch', e => {
 //     console.log('Service Worker: Fetching');

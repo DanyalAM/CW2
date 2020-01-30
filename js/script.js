@@ -1,3 +1,7 @@
+const publicVapidKey = 'BMUvS7wmXpiSx7-b20F_Y3Kap2iD4i2cCA4OfNZSLrRur0PDvbeICrw0nz_nVGMicaHAPMCJKcsM9KqFaNeCMKU';
+
+
+
 //because we're hosting from localhost and github
 //we have to make sure the links can work everywhere
 //github adds another path to the beginning which is the name of the repostiory
@@ -8,7 +12,9 @@ if (window.location.href.indexOf("danyalam.github.io") > -1) {
         window.addEventListener('load', () => {
             navigator.serviceWorker
                 .register('/CW2/sw_cache.js')
-                .then(reg => console.log("Service Worker: Registered"))
+                .then(reg => {
+                    console.log("Service Worker: Registered");
+                })
                 .catch(error => console.log(`Service Worker: Error: ${error}`))
         })
     }
@@ -17,12 +23,41 @@ if (window.location.href.indexOf("danyalam.github.io") > -1) {
         window.addEventListener('load', () => {
             navigator.serviceWorker
                 .register('../sw_cache.js')
-                .then(reg => console.log("Service Worker: Registered"))
-                .catch(error => console.log(`Service Worker: Error: ${error}`))
+                .then(reg => {
+                    if (reg.installing) {
+                        console.log('[Service Worker]: Installing...');
+                    } else if (reg.waiting) {
+                        console.log('[Service Worker]: Waiting...');
+                    } else if (reg.active) {
+                        console.log('[Service Worker]: Active...');
+                    }
+                }).catch(error => console.log(`Service Worker: Error: ${error}`))
         })
     }
 }
 
+Notification.requestPermission(function (status) {
+    console.log('Notification permission status:', status);
+});
+
+function displayNotification() {
+    if (Notification.permission == 'granted') {
+        navigator.serviceWorker.getRegistration().then(function (reg) {
+            console.log(reg);
+            reg.showNotification('Hello world!');
+        });
+    }
+}
+
+var button = document.getElementById('notifications');
+button.addEventListener('click', function (e) {
+    Notification.requestPermission().then(function (result) {
+        if (result === 'granted') {
+            console.log("sdfd");
+            new Notification ("Hellio");
+        }
+    });
+});
 
 //Check if just registered storage exists
 if (localStorage.getItem('justRegistered') !== null) {

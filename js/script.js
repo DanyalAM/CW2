@@ -1,29 +1,9 @@
-function fileExists(url) {
-    if (url) {
-        var req = new XMLHttpRequest();
-        req.open('GET', url, false);
-        req.send();
-        return req.status == 200;
-    } else {
-        return false;
-    }
-}
-
 //because we're hosting from localhost and github
 //we have to make sure the links can work everywhere
 //github adds another path to the beginning which is the name of the repostiory
 //so we have to include that in the path or the file isn't found
-if (fileExists('../sw_cache.js')) {
-    //check if service worker works
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker
-                .register('../sw_cache.js')
-                .then(reg => console.log("Service Worker: Registered"))
-                .catch(error => console.log(`Service Worker: Error: ${error}`))
-        })
-    }
-} else {
+
+if (window.location.href.indexOf("danyalam.github.io") > -1) {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker
@@ -32,7 +12,18 @@ if (fileExists('../sw_cache.js')) {
                 .catch(error => console.log(`Service Worker: Error: ${error}`))
         })
     }
+} else {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker
+                .register('../sw_cache.js')
+                .then(reg => console.log("Service Worker: Registered"))
+                .catch(error => console.log(`Service Worker: Error: ${error}`))
+        })
+    }
 }
+
+
 //Check if just registered storage exists
 if (localStorage.getItem('justRegistered') !== null) {
 

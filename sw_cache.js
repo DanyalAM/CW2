@@ -30,6 +30,10 @@ var cacheAssets = [
     '../server.js',
 ];
 
+var cacheAssets2 = [
+    'CW/index.html'
+];
+
 //put our files into the cache
 self.addEventListener('install', (e) => {
     console.log('Service Worker: Installed');
@@ -39,7 +43,12 @@ self.addEventListener('install', (e) => {
             .then(cache => {
                 console.log('Service Worker: Caching Files');
                 cache.addAll(cacheAssets);
-            }).then(() => self.skipWaiting())
+            })
+            .catch(error => {
+                console.log("[Service Worker:] " + error);
+                cache.addAll(cacheAssets);
+            })
+            .then(() => self.skipWaiting())
     );
 });
 

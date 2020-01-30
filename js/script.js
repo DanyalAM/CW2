@@ -7,7 +7,7 @@ if (window.location.href.indexOf("danyalam.github.io") > -1) {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker
-                .register('CW/sw_cache.js')
+                .register('CW2/sw_cache.js')
                 .then(reg => console.log("Service Worker: Registered"))
                 .catch(error => console.log(`Service Worker: Error: ${error}`))
         })

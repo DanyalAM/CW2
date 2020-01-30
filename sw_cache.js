@@ -30,10 +30,6 @@ var cacheAssets = [
     '../server.js',
 ];
 
-var cacheAssets2 = [
-    'CW/index.html'
-];
-
 //put our files into the cache
 self.addEventListener('install', (e) => {
     console.log('Service Worker: Installed');
@@ -43,12 +39,7 @@ self.addEventListener('install', (e) => {
             .then(cache => {
                 console.log('Service Worker: Caching Files');
                 cache.addAll(cacheAssets);
-            })
-            .catch(error => {
-                console.log("[Service Worker:] " + error);
-                cache.addAll(cacheAssets2);
-            })
-            .then(() => self.skipWaiting())
+            }).then(() => self.skipWaiting())
     );
 });
 
@@ -72,26 +63,26 @@ self.addEventListener('activate', (e) => {
 });
 
 //Call fetch event
-self.addEventListener('fetch', e => {
-    console.log('Service Worker: Fetching');
+// self.addEventListener('fetch', e => {
+//     console.log('Service Worker: Fetching');
 
-    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-})
+//     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+// })
 
 //Call fetch event
 //This fetches the cached content and displayd that instead 
 //is unsecure because of the rest api responses it saves in cache
-// self.addEventListener('fetch', function (e) {
-//     e.respondWith(
-//         caches.match(e.request).then(function (r) {
-//             console.log('[Service Worker] Fetching resource: ' + e.request.url);
-//             return r || fetch(e.request).then(function (response) {
-//                 return caches.open(cacheName).then(function (cache) {
-//                     console.log('[Service Worker] Caching new resource: ' + e.request.url);
-//                     cache.put(e.request, response.clone());
-//                     return response;
-//                 });
-//             });
-//         })
-//     );
-// });
+self.addEventListener('fetch', function (e) {
+    e.respondWith(
+        caches.match(e.request).then(function (r) {
+            console.log('[Service Worker] Fetching resource: ' + e.request.url);
+            return r || fetch(e.request).then(function (response) {
+                return caches.open(cacheName).then(function (cache) {
+                    console.log('[Service Worker] Caching new resource: ' + e.request.url);
+                    cache.put(e.request, response.clone());
+                    return response;
+                });
+            });
+        })
+    );
+});

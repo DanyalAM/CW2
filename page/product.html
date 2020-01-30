@@ -88,17 +88,16 @@
             </div>
 
 
-            <div id="totalProductsFound" v-if="!searchApplied"> There are in total {{ course.length }}
+            <div id="totalProductsFound"> There are in total {{ course.length }}
                 courses.</div>
-            <div id="totalProductsFound" v-else> Your search of <b>{{ curSearch }}</b> returned
-                {{ course.length }} products</div>
+
 
 
             <!-- Print out the products in our storage array -->
             
             <div class="product" v-for="courses in course">
                 <div class="productImage">
-                    <img src="../image/questionMark.jpg" alt="Image">
+                    <img v-bind:src="courses.Image" alt="Image">
                 </div>
 
                 <div class="productName">

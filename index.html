@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BrainHive</title>
+    <link rel="manifest" href="brainHive.webmanifest">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -20,7 +21,7 @@
         </div>
 
         <div class="searchCenter">
-            <form class="searchContainer" v-on:submit="userSearched" action="../page/product.html">
+            <form class="searchContainer" action="../page/product.html">
                 <i class="fa fa-search searchIcon"></i>
                 <input class="searchBox" type="text" name="search" placeholder="Search...">
                 <input type="submit" value="Search" class="searchButton">

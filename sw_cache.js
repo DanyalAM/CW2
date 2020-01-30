@@ -6,28 +6,28 @@ var cacheName = 'v2';
 //     // window.location.replace("/page/login.html");
 //     console.log("gsdfd");
 // }
-
+// /CW2/index.html
 
 var cacheAssets = [
-    '/../index.html',
-    '/../js/script.js',
-    '/../js/component-templates.js',
-    '/../image/arrow-down.png',
-    '/../image/csIcon.png',
-    '/../image/englishIcon.png',
-    '/../image/female-avatar.png',
-    '/../image/male-avatar.png',
-    '/../image/mathsIcon.png',
-    '/../image/pencils-yellowbg.jpg',
-    '/../image/pianoIcon.png',
-    '/../image/loading.jpg',
-    '/../image/random.png',
-    '/../css/style.css',
-    '/../page/login.html',
-    '/../page/myAccount.html',
-    '/../page/product.html',
-    '/../page/register.html',
-    '/../server.js',
+    '/CW2/index.html',
+    // '/../js/script.js',
+    // '/../js/component-templates.js',
+    // '/../image/arrow-down.png',
+    // '/../image/csIcon.png',
+    // '/../image/englishIcon.png',
+    // '/../image/female-avatar.png',
+    // '/../image/male-avatar.png',
+    // '/../image/mathsIcon.png',
+    // '/../image/pencils-yellowbg.jpg',
+    // '/../image/pianoIcon.png',
+    // '/../image/loading.jpg',
+    // '/../image/random.png',
+    // '/../css/style.css',
+    // '/../page/login.html',
+    // '/../page/myAccount.html',
+    // '/../page/product.html',
+    // '/../page/register.html',
+    // '/../server.js',
 ];
 
 //put our files into the cache

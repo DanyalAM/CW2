@@ -1,12 +1,4 @@
-var cacheName = 'v2';
-
-// if (window.location.href.indexOf("danyalam.github.io") > -1) {
-//     // window.location.replace("/CW2/page/login.html");
-// } else {
-//     // window.location.replace("/page/login.html");
-//     console.log("gsdfd");
-// }
-// /CW2/index.html
+var cacheName = 'v1';
 
 
 // var cacheAssets = [
@@ -86,36 +78,72 @@ self.addEventListener('activate', (e) => {
     )
 });
 
+//push notifications with the body and icon received in json
+self.addEventListener('push', function (event) {
+    var jsonData = JSON.parse(event.data.text());
+    //console.log(jsonData);
+    const title = 'Brain Hive';
 
-self.addEventListener('push', e => {
-    const data = e.data.json();
-    console.log('[Service Worker] Push Received');
-    self.registration.showNotification(data.title, {
-        body: 'Notified by Brain Hive',
-        icon: '/icons/icon-32.png'
-    });
-})
-//Call fetch event
-// self.addEventListener('fetch', e => {
-//     console.log('Service Worker: Fetching');
+    event.waitUntil(self.registration.showNotification(title, jsonData));
+});
 
-//     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-// })
 
 //Call fetch event
 //This fetches the cached content and displayd that instead 
 //is unsecure because of the rest api responses it saves in cache
+var online = true;
+
 self.addEventListener('fetch', function (e) {
-    e.respondWith(
-        caches.match(e.request).then(function (r) {
-            console.log('[Service Worker] Fetching resource: ' + e.request.url);
-            return r || fetch(e.request).then(function (response) {
-                return caches.open(cacheName).then(function (cache) {
-                    console.log('[Service Worker] Caching new resource: ' + e.request.url);
-                    cache.put(e.request, response.clone());
-                    return response;
-                });
-            });
-        })
-    );
+
+    if (e.request.method != "PUT") {
+        //dont save the service worker 
+        if (e.request != "http://127.0.0.1:5500/sw_cache.js") {
+            e.respondWith(
+                caches.match(e.request).then(function (r) {
+                    //console.log('[Service Worker] Fetching resource: ' + e.request.url);
+
+                    //use something that isn't in cache to test if we're online or offline
+                    fetch("http://127.0.0.1:5500/sw_cache.js").then(response => {
+                        online = true;
+                    }).catch(() => {
+                        console.log("IT WILL NOT LOAD!!!");
+                        online = false;
+                    })
+
+                    //we need the products and user objects to be updated at every change
+                    if (r != undefined && r.type == "cors" && r.url.includes("Products")) {
+                        //we dont want to call the fetch requests from the cache
+                        //because they will constantly be updated with new products and ratings
+
+                        //if offline dont delete the products object
+                        if (online) {
+                            caches.delete(e.request);
+                            r = undefined;
+                        }
+                    } else if (r != undefined && r.type == "cors" && r.url.includes("collections/Users")) {
+                        //if offline dont delete the specific users object object
+                        if (online) {
+                            caches.delete(e.request);
+                            r = undefined;
+                        }
+                    }
+
+                    //if we're online then r will be set to undefined to always allow
+                    //products and users to be updated
+                    //however if we're offline they will not be undefined
+                    //and that will stop them from causing GET errors
+                    return r || fetch(e.request).then(function (response) {
+                        return caches.open(cacheName).then(function (cache) {
+                            //console.log('[Service Worker] Caching new resource: ' + e.request.url);
+                            cache.put(e.request, response.clone());
+                            return response;
+                        });
+                    });
+
+
+
+                })
+            );
+        }
+    }
 });

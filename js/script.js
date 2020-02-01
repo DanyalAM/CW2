@@ -1,63 +1,121 @@
 const publicVapidKey = 'BMUvS7wmXpiSx7-b20F_Y3Kap2iD4i2cCA4OfNZSLrRur0PDvbeICrw0nz_nVGMicaHAPMCJKcsM9KqFaNeCMKU';
 
-
-
 //because we're hosting from localhost and github
 //we have to make sure the links can work everywhere
 //github adds another path to the beginning which is the name of the repostiory
 //so we have to include that in the path or the file isn't found
-
+var firstCache = false;
 if (window.location.href.indexOf("danyalam.github.io") > -1) {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker
-                .register('/CW2/sw_cache.js')
-                .then(reg => {
-                    console.log("Service Worker: Registered");
-                })
-                .catch(error => console.log(`Service Worker: Error: ${error}`))
+            navigator.serviceWorker.register('/CW2/sw_cache.js').then(function (reg) {
+                console.log("Service Worker: Registered");
+
+                //user must be logged in to subscriber
+                if (localStorage.getItem('currentUser') !== null) {
+                    reg.pushManager.getSubscription().then(function (sub) {
+                        if (sub === null) {
+                            subscribeUser();
+                            console.log('Subscribing the user');
+                        }
+                    })
+                }
+
+            }).catch(error => console.log(`Service Worker: Error: ${error}`))
         })
     }
 } else {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker
-                .register('../sw_cache.js')
-                .then(reg => {
-                    if (reg.installing) {
-                        console.log('[Service Worker]: Installing...');
-                    } else if (reg.waiting) {
-                        console.log('[Service Worker]: Waiting...');
-                    } else if (reg.active) {
-                        console.log('[Service Worker]: Active...');
-                    }
-                }).catch(error => console.log(`Service Worker: Error: ${error}`))
+            navigator.serviceWorker.register('../sw_cache.js').then(function (reg) {
+                console.log("Service Worker: Registered");
+
+                if (localStorage.getItem('currentUser') !== null) {
+                    reg.pushManager.getSubscription().then(function (sub) {
+
+                        if (reg.installing) {
+                            console.log("2");
+                            firstCache = true;
+                        }
+
+
+                        if (sub === null) {
+                            //if subscription is not found we must ask the user's permission
+                            //to subscribe
+                            subscribeUser();
+                            console.log("[Service Worker] Asking for user's permission")
+                        } else {
+
+                            if (firstCache) {
+                                cacheInitNotification(1);
+                            } else {
+                                cacheInitNotification(2);
+                            }
+
+                        }
+                    })
+                }
+
+
+            }).then(reg => {
+
+                // cacheInitNotification(1);
+                // console.log(res);
+            }).catch(error => console.log(`Service Worker: Error: ${error}`))
         })
     }
 }
 
-Notification.requestPermission(function (status) {
-    console.log('Notification permission status:', status);
-});
+function cacheInitNotification(code) {
+    //code 1 = loading old cache
+    //code 2 = creating new cache
+    var userEmail = JSON.parse(localStorage.getItem('currentUser'));
 
-function displayNotification() {
-    if (Notification.permission == 'granted') {
-        navigator.serviceWorker.getRegistration().then(function (reg) {
-            console.log(reg);
-            reg.showNotification('Hello world!');
-        });
+    //cache does not exist
+    fetch('http://localhost:3000/collections/firstCache/' + userEmail + "-" + code)
+        .then(response => {
+            return response
+        }).catch(error => {
+            console.log("Error First Cache: " + error);
+        })
+}
+// cacheInitNotification();
+
+function subscribeUser() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(function (reg) {
+            reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: 'BAetXY39GfoXVKtrzmz1X7nDzYYxMK9VxhDrFYkdA7dXOiaVpngpEAL2nHz8utgHRB69GTlUbTvtJUoqLNMY8iA'
+            }).then(function (sub) {
+                var userEmail = JSON.parse(localStorage.getItem('currentUser'));
+
+                fetch('http://localhost:3000/collections/Subscriptions/postKeys-' + userEmail, {
+                    method: 'POST',
+                    body: JSON.stringify(sub),
+                    headers: {
+                        'content-type': 'application/json'
+                    }
+                }).then(() => {
+                    if (firstCache) {
+                        cacheInitNotification(1);
+                    } else {
+                        cacheInitNotification(2);
+                    }
+                }).catch(error => {
+                    console.log("Error First Cache: " + error);
+                })
+
+            }).catch(function (e) {
+                if (Notification.permission === 'denied') {
+                    console.warn('Permission for notifications was denied');
+                } else {
+                    console.error('Unable to subscribe to push', e);
+                }
+            });
+        })
     }
 }
-
-var button = document.getElementById('notifications');
-button.addEventListener('click', function (e) {
-    Notification.requestPermission().then(function (result) {
-        if (result === 'granted') {
-            console.log("sdfd");
-            new Notification ("Hellio");
-        }
-    });
-});
 
 //Check if just registered storage exists
 if (localStorage.getItem('justRegistered') !== null) {
@@ -448,6 +506,7 @@ if (productsElement != null) {
                             for (var i = 0; i < data[0].userCrumbs.length; i++) {
 
                                 if (data[0].userCrumbs[i] == prodID._id) {
+                                    console.log("already liked");
                                     found = true;
                                     break;
                                 }

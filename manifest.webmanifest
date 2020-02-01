@@ -1,5 +1,6 @@
 {
     "name": "Brain Hive - Course Provider",
+    "gcm_sender_id": "933936286657",
     "short_name": "Brain Hive",
     "description": "A service dedicated to providing high quality courses to students and parents",
     "icons": [

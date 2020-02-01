@@ -1,50 +1,50 @@
 var cacheName = 'v1';
 
 
-// var cacheAssets = [
-//     '/../index.html',
-//     '/../js/script.js',
-//     '/../js/component-templates.js',
-//     '/../image/arrow-down.png',
-//     '/../image/csIcon.png',
-//     '/../image/englishIcon.png',
-//     '/../image/female-avatar.png',
-//     '/../image/male-avatar.png',
-//     '/../image/mathsIcon.png',
-//     '/../image/pencils-yellowbg.jpg',
-//     '/../image/pianoIcon.png',
-//     '/../image/loading.jpg',
-//     '/../image/random.png',
-//     '/../css/style.css',
-//     '/../page/login.html',
-//     '/../page/myAccount.html',
-//     '/../page/product.html',
-//     '/../page/register.html',
-//     '/../server.js',
-// ];
+var cacheAssets = [
+    '/../index.html',
+    '/../js/script.js',
+    '/../js/component-templates.js',
+    '/../image/arrow-down.png',
+    '/../image/csIcon.png',
+    '/../image/englishIcon.png',
+    '/../image/female-avatar.png',
+    '/../image/male-avatar.png',
+    '/../image/mathsIcon.png',
+    '/../image/pencils-yellowbg.jpg',
+    '/../image/pianoIcon.png',
+    '/../image/loading.jpg',
+    '/../image/random.png',
+    '/../css/style.css',
+    '/../page/login.html',
+    '/../page/myAccount.html',
+    '/../page/product.html',
+    '/../page/register.html',
+    '/../server.js',
+];
 
 //for github
-var cacheAssets = [
-    '/CW2/index.html',
-    '/CW2/js/script.js',
-    '/CW2/js/component-templates.js',
-    '/CW2/image/arrow-down.png',
-    '/CW2/image/csIcon.png',
-    '/CW2/image/englishIcon.png',
-    '/CW2/image/female-avatar.png',
-    '/CW2/image/male-avatar.png',
-    '/CW2/image/mathsIcon.png',
-    '/CW2/image/pencils-yellowbg.jpg',
-    '/CW2/image/pianoIcon.png',
-    '/CW2/image/loading.jpg',
-    '/CW2/image/random.png',
-    '/CW2/css/style.css',
-    '/CW2/page/login.html',
-    '/CW2/page/myAccount.html',
-    '/CW2/page/product.html',
-    '/CW2/page/register.html',
-    '/CW2/server.js',
-];
+// var cacheAssets = [
+//     '/CW2/index.html',
+//     '/CW2/js/script.js',
+//     '/CW2/js/component-templates.js',
+//     '/CW2/image/arrow-down.png',
+//     '/CW2/image/csIcon.png',
+//     '/CW2/image/englishIcon.png',
+//     '/CW2/image/female-avatar.png',
+//     '/CW2/image/male-avatar.png',
+//     '/CW2/image/mathsIcon.png',
+//     '/CW2/image/pencils-yellowbg.jpg',
+//     '/CW2/image/pianoIcon.png',
+//     '/CW2/image/loading.jpg',
+//     '/CW2/image/random.png',
+//     '/CW2/css/style.css',
+//     '/CW2/page/login.html',
+//     '/CW2/page/myAccount.html',
+//     '/CW2/page/product.html',
+//     '/CW2/page/register.html',
+//     '/CW2/server.js',
+// ];
 
 //put our files into the cache
 self.addEventListener('install', (e) => {
@@ -111,7 +111,7 @@ self.addEventListener('fetch', function (e) {
                     })
 
                     //we need the products and user objects to be updated at every change
-                    if (r != undefined && r.type == "cors" && r.url.includes("Products")) {
+                    if (r != undefined && e.request.method == "POST" || r != undefined && e.request.method == "GET" ) {
                         //we dont want to call the fetch requests from the cache
                         //because they will constantly be updated with new products and ratings
 
@@ -120,13 +120,7 @@ self.addEventListener('fetch', function (e) {
                             caches.delete(e.request);
                             r = undefined;
                         }
-                    } else if (r != undefined && r.type == "cors" && r.url.includes("collections/Users")) {
-                        //if offline dont delete the specific users object object
-                        if (online) {
-                            caches.delete(e.request);
-                            r = undefined;
-                        }
-                    }
+                    } 
 
                     //if we're online then r will be set to undefined to always allow
                     //products and users to be updated
@@ -139,9 +133,6 @@ self.addEventListener('fetch', function (e) {
                             return response;
                         });
                     });
-
-
-
                 })
             );
         }

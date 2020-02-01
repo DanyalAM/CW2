@@ -1,6 +1,5 @@
 var cacheName = 'v1';
 
-
 // var cacheAssets = [
 //     '/../index.html',
 //     '/../js/script.js',
@@ -117,13 +116,13 @@ self.addEventListener('fetch', function (e) {
 
     if (e.request.method != "PUT") {
         //dont save the service worker 
-        if (e.request != "http://127.0.0.1:5500/sw_cache.js") {
+        if (e.request != "/CW/sw_cache.js") {
             e.respondWith(
                 caches.match(e.request).then(function (r) {
                     //console.log('[Service Worker] Fetching resource: ' + e.request.url);
 
                     //use something that isn't in cache to test if we're online or offline
-                    fetch("http://127.0.0.1:5500/sw_cache.js").then(response => {
+                    fetch("/CW2/sw_cache.js").then(response => {
                         online = true;
                     }).catch(() => {
                         console.log("IT WILL NOT LOAD!!!");

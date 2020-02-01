@@ -74,14 +74,14 @@ app.get('/collections/firstCache/:email-:code', (req, res) => {
                         webpush.sendNotification(success, JSON.stringify(
                             {
                                 body: 'Cache Initialised for the First Time!',
-                                icon: '/icons/icon-32.png',
+                                icon: '/CW2/icons/icon-32.png',
                             })
                         );
                     }else{
                         webpush.sendNotification(success, JSON.stringify(
                             {
                                 body: 'Using Previously Stored Cache!',
-                                icon: '/icons/icon-32.png',
+                                icon: '/CW2/icons/icon-32.png',
                             })
                         );
                     }

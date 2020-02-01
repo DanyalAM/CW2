@@ -4,6 +4,7 @@ const publicVapidKey = 'BMUvS7wmXpiSx7-b20F_Y3Kap2iD4i2cCA4OfNZSLrRur0PDvbeICrw0
 //we have to make sure the links can work everywhere
 //github adds another path to the beginning which is the name of the repostiory
 //so we have to include that in the path or the file isn't found
+
 var firstCache = false;
 if (window.location.href.indexOf("danyalam.github.io") > -1) {
     if ('serviceWorker' in navigator) {
@@ -11,17 +12,33 @@ if (window.location.href.indexOf("danyalam.github.io") > -1) {
             navigator.serviceWorker.register('/CW2/sw_cache.js').then(function (reg) {
                 console.log("Service Worker: Registered");
 
-                //user must be logged in to subscriber
                 if (localStorage.getItem('currentUser') !== null) {
                     reg.pushManager.getSubscription().then(function (sub) {
+
+                        //if registration is installing then this is a new cache
+                        if (reg.installing) {
+                            firstCache = true;
+                        }
+
                         if (sub === null) {
+                            //if subscription is not found we must ask the user's permission
+                            //to subscribe
                             subscribeUser();
-                            console.log('Subscribing the user');
+                            console.log("[Service Worker] Asking for user's permission")
+                        } else {
+
+                            //if its a new cache send a notification fetch with code 1
+                            //otherwise send a notification fetch with code 2
+                            if (firstCache) {
+                                cacheInitNotification(1);
+                            } else {
+                                cacheInitNotification(2);
+                            }
                         }
                     })
                 }
-
-            }).catch(error => console.log(`Service Worker: Error: ${error}`))
+            }).then(reg => {
+            }).catch(error => console.log("Service Worker: Error"))
         })
     }
 } else {
@@ -37,7 +54,6 @@ if (window.location.href.indexOf("danyalam.github.io") > -1) {
                             console.log("2");
                             firstCache = true;
                         }
-
 
                         if (sub === null) {
                             //if subscription is not found we must ask the user's permission
@@ -55,13 +71,8 @@ if (window.location.href.indexOf("danyalam.github.io") > -1) {
                         }
                     })
                 }
-
-
             }).then(reg => {
-
-                // cacheInitNotification(1);
-                // console.log(res);
-            }).catch(error => console.log(`Service Worker: Error: ${error}`))
+            }).catch(error => console.log("Service Worker: Error"))
         })
     }
 }
@@ -297,7 +308,6 @@ if (registerForm != null) {
                                 } else {
                                     alert("Unknown Error - Please Inform Support");
                                 }
-
                             })
                         }
                     }).catch(error => {
@@ -317,11 +327,6 @@ if (registerForm != null) {
             emailExists: function (email) {
                 //if the email already is in use return true
                 var found = false;
-
-
-
-                //danyal@hotmail.com
-
             }
         },
     })
@@ -401,9 +406,10 @@ if (loginForm != null) {
                             if (!found) {
                                 this.incorrectInfo = true;
                             } else {
-                                this.incorrectInfo = false;
+                                this.incorrectInfo = false;                               
                                 localStorage.setItem('currentUser', JSON.stringify(this.loginEmail.toLowerCase()));
 
+                                subscribeUser();
                                 if (window.location.href.indexOf("danyalam.github.io") > -1) {
                                     window.location.replace("/CW2/page/myAccount.html");
                                 } else {
@@ -438,7 +444,6 @@ if (productsElement != null) {
         el: '.products',
         mounted() {
             this.showProducts();
-
         },
         data: function () {
             return {
@@ -481,12 +486,67 @@ if (productsElement != null) {
                             //sort by best reviews to worse 
                             this.course.sort(function (a, b) { return b.AvgRating - a.AvgRating });
                         }
+                    }).then(() => {
+                        //we dont want the images to load at the very start, instead we'll want them to load when they're
+                        //accessed by the user
+                        
+                        var targets = document.querySelectorAll("img[data-src]");
+
+                        const lazyLoad = target => {
+                            const io = new IntersectionObserver((entries, observer) => {
+                                entries.forEach(entry => {
+                                    if(entry.isIntersecting){
+                                        const img = entry.target;
+                                        const src = img.getAttribute('data-src');
+                                        img.removeAttribute('data-src');
+
+                                        img.setAttribute('src', src);
+                                        img.classList.add('fade');
+
+                                        //now the image is visible we dont need to keep observing it
+                                        observer.disconnect();
+                                    }
+                                })
+                            })
+
+                            io.observe(target);
+                        }
+
+                        targets.forEach(lazyLoad);
+
+
+                        let imagesToLoad = document.querySelectorAll('img[data-src]');
+                        const loadImages = (image) => {
+                            image.setAttribute('src', image.getAttribute('data-src'));
+                            image.onload = () => {
+                                image.removeAttribute('data-src');
+                            };
+                        };
+
+                        // if ('IntersectionObserver' in window) {
+                        //     console.log("allowed");
+                        //     const observer = new IntersectionObserver((items, observer) => {
+                        //         items.forEach((item) => {
+                        //             if (item.isIntersecting) {
+                        //                 loadImages(item.target);
+                        //                 observer.unobserve(item.target);
+                        //             }
+                        //         });
+                        //     });
+                        //     imagesToLoad.forEach((img) => {
+                        //         observer.observe(img);
+                        //     });
+                        // } else {
+                        //     imagesToLoad.forEach((img) => {
+                        //         loadImages(img);
+                        //     });
+                        // }
                     })
             },
             likeProduct: function (index, prodID) {
                 //index in the rating number they want to give
                 //prodID is the mongoDB assigned ID of the product
-                //console.log()
+
                 //get the current logged in user's email from localstorage
                 var currentUser = JSON.parse(localStorage.getItem('currentUser'));
                 var found = false;
@@ -995,6 +1055,4 @@ var menuBar = new Vue({
             this.show = false;
         }
     }
-
 });
-

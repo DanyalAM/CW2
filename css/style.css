@@ -960,6 +960,15 @@ pre {
     padding: 0.6rem;
 }
 
+.product .productImage img[data-src] {
+    filter: blur(0.6em);
+}
+
+.product .productImahe img {
+    filter: blur(0em);
+    transition: filter 0.1s;
+}
+
 .productImage img {
     width: 100%;
     height: 100%;

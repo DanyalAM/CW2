@@ -66,12 +66,9 @@
 
     <aside id="aside">
         <p id="filter-heading">Filter by</p>
-
-
     </aside>
 
     <main class="main-with-aisde">
-
 
         <div class="products">
 
@@ -94,13 +91,14 @@
             <div id="totalProductsFound"> There are in total {{ course.length }}
                 courses.</div>
 
-
+<!-- //v-bind:src="courses.Image" -->
 
             <!-- Print out the products in our storage array -->
-            
+            <!-- You should use v-attr="src: imageLink" -->
+            <!-- v-bind:data-src="course.Image" -->
             <div class="product" v-for="courses in course">
                 <div class="productImage">
-                    <img v-bind:src="courses.Image" alt="Image">
+                    <img src="../image/loading.jpg" v-bind:data-src="courses.Image" alt="Image">
                 </div>
 
                 <div class="productName">
